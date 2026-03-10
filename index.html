@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MediCare+ | Healthcare & Wellness Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:ital,wght@0,300;0,700;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin:0;padding:0;box-sizing:border-box; }
+    :root {
+      --bg: #f0f9f4; --white: #ffffff; --surface: #e8f5ed;
+      --primary: #0d6e4f; --primary-light: #1a9468; --primary-dark: #084d37;
+      --accent: #ff6b35; --accent2: #4ecdc4; --accent3: #ffd166;
+      --text: #1a2e22; --muted: #5a7a68; --border: rgba(13,110,79,0.12);
+      --card-shadow: 0 4px 24px rgba(13,110,79,0.08);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden; }
+
+    /* NAV */
+    nav { position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 4rem;display:flex;justify-content:space-between;align-items:center;background:rgba(240,249,244,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border); }
+    .nav-brand { display:flex;align-items:center;gap:.6rem;font-size:1.3rem;font-weight:800;color:var(--primary); }
+    .nav-brand .dot { width:8px;height:8px;background:var(--accent);border-radius:50%; }
+    .nav-links { display:flex;gap:2rem;list-style:none; }
+    .nav-links a { color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:500;transition:color .2s; }
+    .nav-links a:hover { color:var(--primary); }
+    .nav-btn { padding:.6rem 1.5rem;background:var(--primary);color:#fff;border-radius:100px;font-size:.875rem;font-weight:600;text-decoration:none;transition:all .2s;border:none;cursor:pointer; }
+    .nav-btn:hover { background:var(--primary-light);transform:translateY(-1px); }
+
+    /* HERO */
+    .hero { min-height:100vh;padding:8rem 4rem 4rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;position:relative;overflow:hidden; }
+    .hero-bg-blob { position:absolute;right:-10%;top:-10%;width:600px;height:600px;background:radial-gradient(circle,rgba(13,110,79,.08) 0%,transparent 70%);border-radius:50%;pointer-events:none; }
+    .hero-bg-blob2 { position:absolute;left:-5%;bottom:-5%;width:400px;height:400px;background:radial-gradient(circle,rgba(78,205,196,.1) 0%,transparent 70%);border-radius:50%;pointer-events:none; }
+    .hero-tag { display:inline-flex;align-items:center;gap:.5rem;background:rgba(13,110,79,.08);border:1px solid rgba(13,110,79,.15);color:var(--primary);padding:.35rem .9rem;border-radius:100px;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.5rem; }
+    .hero h1 { font-family:'Fraunces',serif;font-size:clamp(2.8rem,5vw,4.2rem);font-weight:700;line-height:1.1;letter-spacing:-.02em;margin-bottom:1.5rem; }
+    .hero h1 em { font-style:italic;color:var(--primary); }
+    .hero-sub { font-size:1.05rem;color:var(--muted);line-height:1.8;margin-bottom:2rem;max-width:480px; }
+    .hero-actions { display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:2.5rem; }
+    .btn-main { padding:.9rem 2rem;background:var(--primary);color:#fff;border-radius:100px;font-weight:700;font-size:.9rem;text-decoration:none;transition:all .25s;display:inline-flex;align-items:center;gap:.5rem;border:none;cursor:pointer; }
+    .btn-main:hover { background:var(--primary-light);transform:translateY(-2px);box-shadow:0 8px 30px rgba(13,110,79,.25); }
+    .btn-ghost { padding:.9rem 2rem;background:transparent;color:var(--primary);border:1.5px solid var(--primary);border-radius:100px;font-weight:600;font-size:.9rem;text-decoration:none;transition:all .25s; }
+    .btn-ghost:hover { background:var(--primary);color:#fff; }
+    .hero-trust { display:flex;align-items:center;gap:.75rem;font-size:.8rem;color:var(--muted); }
+    .trust-avatars { display:flex; }
+    .trust-avatar { width:32px;height:32px;border-radius:50%;border:2px solid #fff;margin-left:-8px;background:linear-gradient(135deg,var(--primary-light),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:#fff; }
+    .trust-avatar:first-child { margin-left:0; }
+    .hero-visual { position:relative; }
+    .hero-main-card { background:#fff;border-radius:28px;padding:2rem;box-shadow:var(--card-shadow);border:1px solid var(--border);position:relative; }
+    .health-score-ring { width:180px;height:180px;margin:0 auto 1.5rem;position:relative; }
+    .health-score-ring svg { transform:rotate(-90deg); }
+    .score-text { position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center; }
+    .score-num { font-family:'Fraunces',serif;font-size:2.5rem;font-weight:700;color:var(--primary);line-height:1; }
+    .score-label { font-size:.7rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em; }
+    .health-metrics { display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-top:1rem; }
+    .metric { background:var(--bg);border-radius:12px;padding:.75rem;text-align:center; }
+    .metric-val { font-size:1rem;font-weight:700;color:var(--primary); }
+    .metric-name { font-size:.65rem;color:var(--muted);margin-top:.15rem; }
+    .float-card { position:absolute;background:#fff;border-radius:16px;padding:1rem 1.25rem;box-shadow:0 8px 32px rgba(0,0,0,.1);border:1px solid var(--border);animation:float 4s ease-in-out infinite; }
+    @keyframes float { 0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)} }
+    .float-card.left { left:-4rem;top:40%;animation-delay:.5s; }
+    .float-card.top { right:-2rem;top:-1rem;animation-delay:1s; }
+    .float-card .fc-icon { font-size:1.4rem;margin-bottom:.25rem; }
+    .float-card .fc-val { font-size:1rem;font-weight:700;color:var(--primary); }
+    .float-card .fc-label { font-size:.7rem;color:var(--muted); }
+
+    /* STATS BAR */
+    .stats-bar { background:var(--primary);padding:2.5rem 4rem;display:flex;justify-content:space-around;flex-wrap:wrap;gap:2rem; }
+    .stat-item { text-align:center; }
+    .stat-n { font-family:'Fraunces',serif;font-size:2.2rem;font-weight:700;color:#fff; }
+    .stat-l { font-size:.8rem;color:rgba(255,255,255,.7);margin-top:.25rem;text-transform:uppercase;letter-spacing:.06em; }
+
+    /* SECTIONS */
+    .section { padding:5rem 4rem; }
+    .section-center { text-align:center;margin-bottom:3rem; }
+    .chip { display:inline-block;background:rgba(13,110,79,.08);color:var(--primary);padding:.35rem .9rem;border-radius:100px;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:1rem; }
+    .section h2 { font-family:'Fraunces',serif;font-size:clamp(2rem,4vw,3rem);font-weight:700;letter-spacing:-.02em;margin-bottom:.75rem; }
+    .section h2 em { font-style:italic;color:var(--primary); }
+    .section-desc { color:var(--muted);font-size:1rem;line-height:1.7;max-width:560px;margin:0 auto; }
+
+    /* SERVICES */
+    .services-bg { background:var(--surface); }
+    .services-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem; }
+    .service-card { background:#fff;border-radius:20px;padding:2rem;border:1px solid var(--border);transition:all .3s;cursor:pointer;position:relative;overflow:hidden; }
+    .service-card::after { content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--primary),var(--accent2));transform:scaleX(0);transition:transform .3s; }
+    .service-card:hover { transform:translateY(-6px);box-shadow:0 16px 48px rgba(13,110,79,.12); }
+    .service-card:hover::after { transform:scaleX(1); }
+    .svc-icon { width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:1.25rem; }
+    .svc-title { font-family:'Fraunces',serif;font-size:1.15rem;font-weight:700;margin-bottom:.5rem; }
+    .svc-desc { font-size:.85rem;color:var(--muted);line-height:1.7; }
+    .svc-link { display:inline-flex;align-items:center;gap:.3rem;margin-top:1rem;font-size:.8rem;font-weight:700;color:var(--primary);text-decoration:none; }
+
+    /* DOCTORS */
+    .doctors-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem; }
+    .doctor-card { background:#fff;border-radius:20px;overflow:hidden;border:1px solid var(--border);transition:all .3s; }
+    .doctor-card:hover { transform:translateY(-4px);box-shadow:var(--card-shadow); }
+    .doctor-img { height:180px;display:flex;align-items:center;justify-content:center;font-size:4rem; }
+    .doctor-body { padding:1.25rem; }
+    .doctor-name { font-family:'Fraunces',serif;font-size:1.05rem;font-weight:700;margin-bottom:.2rem; }
+    .doctor-spec { font-size:.8rem;color:var(--primary);font-weight:600;margin-bottom:.5rem; }
+    .doctor-rating { display:flex;align-items:center;gap:.3rem;font-size:.8rem;color:var(--muted); }
+    .stars { color:#ffd166; }
+    .doctor-btn { width:100%;margin-top:1rem;padding:.65rem;background:var(--bg);border:1.5px solid var(--border);border-radius:100px;font-weight:600;font-size:.8rem;color:var(--primary);cursor:pointer;transition:all .2s; }
+    .doctor-btn:hover { background:var(--primary);color:#fff;border-color:var(--primary); }
+
+    /* BOOKING */
+    .booking-bg { background:var(--surface); }
+    .booking-wrapper { display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start; }
+    .booking-info h2 { font-family:'Fraunces',serif;font-size:2.2rem;font-weight:700;letter-spacing:-.02em;margin-bottom:1rem; }
+    .booking-info h2 em { font-style:italic;color:var(--primary); }
+    .booking-info p { color:var(--muted);line-height:1.8;margin-bottom:1.5rem; }
+    .booking-steps { display:flex;flex-direction:column;gap:1rem; }
+    .step { display:flex;gap:1rem;align-items:flex-start; }
+    .step-num { width:36px;height:36px;min-width:36px;background:var(--primary);color:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.875rem; }
+    .step-text strong { display:block;font-weight:700;margin-bottom:.2rem; }
+    .step-text span { font-size:.85rem;color:var(--muted); }
+    .booking-form { background:#fff;border-radius:24px;padding:2rem;box-shadow:var(--card-shadow);border:1px solid var(--border); }
+    .booking-form h3 { font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700;margin-bottom:1.5rem; }
+    .form-row { display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem; }
+    .form-group { margin-bottom:1rem; }
+    .form-group label { display:block;font-size:.8rem;font-weight:600;color:var(--text);margin-bottom:.4rem; }
+    .form-group input, .form-group select, .form-group textarea {
+      width:100%;padding:.75rem 1rem;border:1.5px solid var(--border);border-radius:10px;font-size:.9rem;font-family:inherit;color:var(--text);background:#fff;outline:none;transition:border .2s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:var(--primary); }
+    .form-group textarea { resize:vertical;min-height:80px; }
+    .form-submit { width:100%;padding:.9rem;background:var(--primary);color:#fff;border:none;border-radius:100px;font-size:.95rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;margin-top:.5rem; }
+    .form-submit:hover { background:var(--primary-light);transform:translateY(-1px);box-shadow:0 8px 24px rgba(13,110,79,.25); }
+    .success-msg { display:none;text-align:center;padding:1.5rem;background:rgba(13,110,79,.05);border-radius:12px;border:1px solid rgba(13,110,79,.15);color:var(--primary);font-weight:600; }
+
+    /* WELLNESS TIPS */
+    .tips-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem; }
+    .tip-card { background:#fff;border-radius:20px;padding:1.75rem;border:1px solid var(--border);transition:all .3s; }
+    .tip-card:hover { transform:translateY(-4px);box-shadow:var(--card-shadow); }
+    .tip-emoji { font-size:2rem;margin-bottom:1rem; }
+    .tip-title { font-family:'Fraunces',serif;font-size:1.05rem;font-weight:700;margin-bottom:.5rem; }
+    .tip-text { font-size:.85rem;color:var(--muted);line-height:1.7; }
+    .tip-tag { display:inline-block;margin-top:.75rem;padding:.2rem .6rem;background:rgba(13,110,79,.08);color:var(--primary);border-radius:100px;font-size:.7rem;font-weight:700; }
+
+    /* HEALTH TRACKER */
+    .tracker-bg { background:var(--primary); }
+    .tracker-inner { max-width:700px;margin:0 auto;text-align:center; }
+    .tracker-inner .chip { background:rgba(255,255,255,.15);color:#fff; }
+    .tracker-inner h2 { color:#fff; }
+    .tracker-inner h2 em { color:var(--accent3); }
+    .tracker-inner .section-desc { color:rgba(255,255,255,.7); }
+    .bmi-calculator { background:rgba(255,255,255,.1);border-radius:24px;padding:2rem;margin-top:2rem;border:1px solid rgba(255,255,255,.15); }
+    .bmi-inputs { display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem; }
+    .bmi-field label { display:block;font-size:.8rem;font-weight:600;color:rgba(255,255,255,.8);margin-bottom:.5rem; }
+    .bmi-field input { width:100%;padding:.75rem 1rem;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);border-radius:10px;color:#fff;font-size:1rem;outline:none;font-family:inherit;transition:border .2s; }
+    .bmi-field input::placeholder { color:rgba(255,255,255,.4); }
+    .bmi-field input:focus { border-color:var(--accent3); }
+    .bmi-btn { padding:.85rem 2.5rem;background:var(--accent3);color:var(--primary-dark);border:none;border-radius:100px;font-weight:800;font-size:.95rem;cursor:pointer;font-family:inherit;transition:all .2s; }
+    .bmi-btn:hover { transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,209,102,.3); }
+    .bmi-result { margin-top:1.5rem;padding:1.25rem;background:rgba(255,255,255,.1);border-radius:16px;display:none; }
+    .bmi-result.show { display:block; }
+    .bmi-score { font-family:'Fraunces',serif;font-size:3rem;font-weight:700;color:var(--accent3); }
+    .bmi-cat { font-size:.9rem;color:rgba(255,255,255,.8);margin-top:.25rem; }
+    .bmi-tip { font-size:.8rem;color:rgba(255,255,255,.6);margin-top:.5rem; }
+
+    /* TESTIMONIALS */
+    .testimonials-bg { background:var(--surface); }
+    .testimonials-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem; }
+    .testi-card { background:#fff;border-radius:20px;padding:1.75rem;border:1px solid var(--border); }
+    .testi-stars { color:#ffd166;font-size:1rem;margin-bottom:.75rem; }
+    .testi-text { font-size:.9rem;color:var(--text);line-height:1.7;margin-bottom:1.25rem;font-style:italic; }
+    .testi-author { display:flex;align-items:center;gap:.75rem; }
+    .testi-avatar { width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--primary-light),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:.875rem; }
+    .testi-name { font-weight:700;font-size:.875rem; }
+    .testi-role { font-size:.75rem;color:var(--muted); }
+
+    /* FOOTER */
+    footer { background:var(--primary-dark);color:#fff;padding:4rem;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem; }
+    .footer-brand .brand { font-size:1.3rem;font-weight:800;margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem; }
+    .footer-desc { font-size:.85rem;color:rgba(255,255,255,.6);line-height:1.7;max-width:280px; }
+    .footer-col h4 { font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:1.25rem;color:rgba(255,255,255,.5); }
+    .footer-col ul { list-style:none;display:flex;flex-direction:column;gap:.65rem; }
+    .footer-col ul a { color:rgba(255,255,255,.7);text-decoration:none;font-size:.875rem;transition:color .2s; }
+    .footer-col ul a:hover { color:#fff; }
+    .footer-bottom { background:var(--primary-dark);padding:1.25rem 4rem;border-top:1px solid rgba(255,255,255,.08);text-align:center;font-size:.8rem;color:rgba(255,255,255,.4); }
+
+    /* MODAL */
+    .modal-overlay { position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem; }
+    .modal-overlay.open { display:flex; }
+    .modal { background:#fff;border-radius:24px;padding:2rem;max-width:440px;width:100%;position:relative; }
+    .modal-close { position:absolute;top:1rem;right:1rem;background:var(--bg);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center; }
+    .modal h3 { font-family:'Fraunces',serif;font-size:1.5rem;font-weight:700;margin-bottom:1.5rem; }
+    .modal-doctor-info { display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg);border-radius:12px;margin-bottom:1.5rem; }
+    .modal-doc-icon { font-size:2.5rem; }
+    .modal-doc-name { font-weight:700; }
+    .modal-doc-spec { font-size:.85rem;color:var(--primary); }
+
+    /* TOAST */
+    .toast { position:fixed;bottom:2rem;right:2rem;background:var(--primary);color:#fff;padding:1rem 1.5rem;border-radius:12px;font-weight:600;font-size:.875rem;transform:translateX(200%);transition:transform .4s;z-index:999; }
+    .toast.show { transform:translateX(0); }
+
+    /* SCROLL REVEAL */
+    .reveal { opacity:0;transform:translateY(30px);transition:all .6s ease; }
+    .reveal.visible { opacity:1;transform:translateY(0); }
+
+    @media(max-width:900px){
+      nav{padding:1rem 1.5rem} .nav-links{display:none}
+      .hero{grid-template-columns:1fr;padding:6rem 1.5rem 3rem}
+      .hero-visual{display:none}
+      .stats-bar{padding:2rem 1.5rem}
+      .section{padding:3.5rem 1.5rem}
+      .booking-wrapper{grid-template-columns:1fr}
+      footer{grid-template-columns:1fr 1fr;gap:2rem;padding:3rem 1.5rem}
+      .footer-bottom{padding:1rem 1.5rem}
+      .float-card{display:none}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand"><div class="dot"></div>MediCare+</div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#doctors">Doctors</a></li>
+    <li><a href="#booking">Book Now</a></li>
+    <li><a href="#wellness">Wellness</a></li>
+    <li><a href="#tracker">BMI Tracker</a></li>
+  </ul>
+  <button class="nav-btn" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Book Appointment</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-blob"></div>
+  <div class="hero-bg-blob2"></div>
+  <div class="hero-content">
+    <div class="hero-tag">🏥 Trusted Healthcare Platform</div>
+    <h1>Your Health, Our <em>Priority</em> — Always</h1>
+    <p class="hero-sub">Connect with top-rated doctors, track your wellness journey, and access personalized healthcare — all in one place. Quality care, when you need it most.</p>
+    <div class="hero-actions">
+      <a href="#booking" class="btn-main">📅 Book a Consultation</a>
+      <a href="#tracker" class="btn-ghost">Check Your BMI</a>
+    </div>
+    <div class="hero-trust">
+      <div class="trust-avatars">
+        <div class="trust-avatar">JD</div>
+        <div class="trust-avatar">SA</div>
+        <div class="trust-avatar">MK</div>
+        <div class="trust-avatar">+</div>
+      </div>
+      <span>Trusted by <strong>50,000+</strong> patients across India</span>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="float-card left">
+      <div class="fc-icon">❤️</div>
+      <div class="fc-val">72 BPM</div>
+      <div class="fc-label">Heart Rate</div>
+    </div>
+    <div class="float-card top">
+      <div class="fc-icon">😴</div>
+      <div class="fc-val">7.5 hrs</div>
+      <div class="fc-label">Sleep Quality</div>
+    </div>
+    <div class="hero-main-card">
+      <div style="text-align:center;margin-bottom:.5rem;font-weight:700;color:var(--muted);font-size:.85rem;text-transform:uppercase;letter-spacing:.06em">Health Score</div>
+      <div class="health-score-ring">
+        <svg width="180" height="180" viewBox="0 0 180 180">
+          <circle cx="90" cy="90" r="75" fill="none" stroke="#e8f5ed" stroke-width="12"/>
+          <circle cx="90" cy="90" r="75" fill="none" stroke="#0d6e4f" stroke-width="12" stroke-dasharray="471" stroke-dashoffset="94" stroke-linecap="round"/>
+        </svg>
+        <div class="score-text">
+          <div class="score-num">84</div>
+          <div class="score-label">/ 100</div>
+        </div>
+      </div>
+      <div class="health-metrics">
+        <div class="metric"><div class="metric-val">120/80</div><div class="metric-name">Blood Pressure</div></div>
+        <div class="metric"><div class="metric-val">98.2°</div><div class="metric-name">Temperature</div></div>
+        <div class="metric"><div class="metric-val">99%</div><div class="metric-name">SpO2</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item"><div class="stat-n">500+</div><div class="stat-l">Expert Doctors</div></div>
+  <div class="stat-item"><div class="stat-n">50K+</div><div class="stat-l">Happy Patients</div></div>
+  <div class="stat-item"><div class="stat-n">30+</div><div class="stat-l">Specializations</div></div>
+  <div class="stat-item"><div class="stat-n">24/7</div><div class="stat-l">Support Available</div></div>
+  <div class="stat-item"><div class="stat-n">4.9★</div><div class="stat-l">Average Rating</div></div>
+</div>
+
+<!-- SERVICES -->
+<section class="section services-bg" id="services">
+  <div class="section-center">
+    <div class="chip reveal">Our Services</div>
+    <h2 class="reveal">Complete <em>Care</em> Under One Roof</h2>
+    <p class="section-desc reveal">From primary consultations to specialist care, we cover every aspect of your health journey.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="svc-icon" style="background:rgba(13,110,79,.08)">🩺</div>
+      <div class="svc-title">General Consultation</div>
+      <div class="svc-desc">Quick, effective consultations with experienced GPs for everyday health concerns and routine checkups.</div>
+      <a href="#booking" class="svc-link">Book Now →</a>
+    </div>
+    <div class="service-card reveal">
+      <div class="svc-icon" style="background:rgba(78,205,196,.1)">🧠</div>
+      <div class="svc-title">Mental Wellness</div>
+      <div class="svc-desc">Confidential therapy sessions, stress management, and mental health support from certified professionals.</div>
+      <a href="#booking" class="svc-link">Book Now →</a>
+    </div>
+    <div class="service-card reveal">
+      <div class="svc-icon" style="background:rgba(255,107,53,.1)">🫀</div>
+      <div class="svc-title">Cardiology</div>
+      <div class="svc-desc">Heart health monitoring, ECG analysis, and cardiac care from leading cardiologists.</div>
+      <a href="#booking" class="svc-link">Book Now →</a>
+    </div>
+    <div class="service-card reveal">
+      <div class="svc-icon" style="background:rgba(255,209,102,.12)">🔬</div>
+      <div class="svc-title">Lab & Diagnostics</div>
+      <div class="svc-desc">Comprehensive blood tests, imaging, and diagnostic services with home sample collection.</div>
+      <a href="#booking" class="svc-link">Book Now →</a>
+    </div>
+    <div class="service-card reveal">
+      <div class="svc-icon" style="background:rgba(13,110,79,.08)">🏃</div>
+      <div class="svc-title">Physiotherapy</div>
+      <div class="svc-desc">Rehabilitation, pain management, and physical therapy tailored to your recovery goals.</div>
+      <a href="#booking" class="svc-link">Book Now →</a>
+    </div>
+    <div class="service-card reveal">
+      <div class="svc-icon" style="background:rgba(78,205,196,.1)">💊</div>
+      <div class="svc-title">Nutrition & Diet</div>
+      <div class="svc-desc">Personalized meal plans, dietary counseling, and nutrition support from certified dietitians.</div>
+      <a href="#booking" class="svc-link">Book Now →</a>
+    </div>
+  </div>
+</section>
+
+<!-- DOCTORS -->
+<section class="section" id="doctors">
+  <div class="section-center">
+    <div class="chip reveal">Our Specialists</div>
+    <h2 class="reveal">Meet Our <em>Expert</em> Doctors</h2>
+    <p class="section-desc reveal">Board-certified specialists dedicated to providing compassionate, world-class care.</p>
+  </div>
+  <div class="doctors-grid">
+    <div class="doctor-card reveal">
+      <div class="doctor-img" style="background:linear-gradient(135deg,#e8f5ed,#c8e6d4)">👩‍⚕️</div>
+      <div class="doctor-body">
+        <div class="doctor-name">Dr. Priya Sharma</div>
+        <div class="doctor-spec">Cardiologist · 12 yrs exp</div>
+        <div class="doctor-rating"><span class="stars">★★★★★</span> 4.9 (320 reviews)</div>
+        <button class="doctor-btn" onclick="openModal('Dr. Priya Sharma','Cardiologist')">Book Appointment</button>
+      </div>
+    </div>
+    <div class="doctor-card reveal">
+      <div class="doctor-img" style="background:linear-gradient(135deg,#e8f0ff,#c8d4f0)">👨‍⚕️</div>
+      <div class="doctor-body">
+        <div class="doctor-name">Dr. Arjun Mehta</div>
+        <div class="doctor-spec">Neurologist · 9 yrs exp</div>
+        <div class="doctor-rating"><span class="stars">★★★★★</span> 4.8 (215 reviews)</div>
+        <button class="doctor-btn" onclick="openModal('Dr. Arjun Mehta','Neurologist')">Book Appointment</button>
+      </div>
+    </div>
+    <div class="doctor-card reveal">
+      <div class="doctor-img" style="background:linear-gradient(135deg,#fff5e8,#ffe0c4)">👩‍⚕️</div>
+      <div class="doctor-body">
+        <div class="doctor-name">Dr. Kavya Reddy</div>
+        <div class="doctor-spec">Psychiatrist · 8 yrs exp</div>
+        <div class="doctor-rating"><span class="stars">★★★★★</span> 4.9 (189 reviews)</div>
+        <button class="doctor-btn" onclick="openModal('Dr. Kavya Reddy','Psychiatrist')">Book Appointment</button>
+      </div>
+    </div>
+    <div class="doctor-card reveal">
+      <div class="doctor-img" style="background:linear-gradient(135deg,#f0fff8,#c4ffe0)">👨‍⚕️</div>
+      <div class="doctor-body">
+        <div class="doctor-name">Dr. Rohan Gupta</div>
+        <div class="doctor-spec">Orthopedic · 14 yrs exp</div>
+        <div class="doctor-rating"><span class="stars">★★★★★</span> 4.7 (402 reviews)</div>
+        <button class="doctor-btn" onclick="openModal('Dr. Rohan Gupta','Orthopedic Surgeon')">Book Appointment</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section class="section booking-bg" id="booking">
+  <div class="booking-wrapper">
+    <div class="booking-info reveal">
+      <div class="chip">Easy Booking</div>
+      <h2>Book Your <em>Appointment</em> in Minutes</h2>
+      <p>No long queues, no waiting. Select your preferred doctor, choose a time slot, and confirm your appointment — all online.</p>
+      <div class="booking-steps">
+        <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Choose a Specialist</strong><span>Browse our team of certified doctors</span></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text"><strong>Select Date & Time</strong><span>Pick a slot that works for you</span></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text"><strong>Confirm & Connect</strong><span>Get an instant confirmation via email</span></div></div>
+      </div>
+    </div>
+    <div class="booking-form reveal">
+      <h3>📅 Book an Appointment</h3>
+      <div id="bookingFormWrap">
+        <div class="form-row">
+          <div class="form-group"><label>First Name</label><input type="text" placeholder="Durga Praveen"/></div>
+          <div class="form-group"><label>Last Name</label><input type="text" placeholder="Gunnam"/></div>
+        </div>
+        <div class="form-group"><label>Email Address</label><input type="email" placeholder="you@example.com"/></div>
+        <div class="form-group"><label>Phone Number</label><input type="tel" placeholder="+91 9876543210"/></div>
+        <div class="form-row">
+          <div class="form-group"><label>Department</label>
+            <select>
+              <option>Select Department</option>
+              <option>Cardiology</option>
+              <option>Neurology</option>
+              <option>Mental Health</option>
+              <option>Orthopedic</option>
+              <option>General Medicine</option>
+              <option>Nutrition</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Preferred Date</label><input type="date"/></div>
+        </div>
+        <div class="form-group"><label>Describe Your Concern (optional)</label><textarea placeholder="Brief description of your symptoms or reason for visit..."></textarea></div>
+        <button class="form-submit" onclick="handleBooking()">Confirm Appointment →</button>
+      </div>
+      <div class="success-msg" id="successMsg">
+        ✅ Appointment booked successfully!<br/><span style="font-weight:400;font-size:.85rem">We'll send a confirmation to your email shortly.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WELLNESS TIPS -->
+<section class="section" id="wellness">
+  <div class="section-center">
+    <div class="chip reveal">Wellness Hub</div>
+    <h2 class="reveal">Daily <em>Wellness</em> Tips</h2>
+    <p class="section-desc reveal">Science-backed tips to help you live healthier, happier, and longer.</p>
+  </div>
+  <div class="tips-grid">
+    <div class="tip-card reveal"><div class="tip-emoji">💧</div><div class="tip-title">Stay Hydrated</div><div class="tip-text">Drink at least 8 glasses (2L) of water daily. Proper hydration boosts energy, improves focus, and supports kidney function.</div><span class="tip-tag">Everyday</span></div>
+    <div class="tip-card reveal"><div class="tip-emoji">🧘</div><div class="tip-title">Mindful Meditation</div><div class="tip-text">Just 10 minutes of daily meditation reduces cortisol levels by up to 20%, helping manage stress and improve mental clarity.</div><span class="tip-tag">Mental Health</span></div>
+    <div class="tip-card reveal"><div class="tip-emoji">🏃</div><div class="tip-title">Move Every Hour</div><div class="tip-text">Take a 5-minute walk every hour to improve circulation, reduce back pain, and boost metabolism throughout the day.</div><span class="tip-tag">Fitness</span></div>
+    <div class="tip-card reveal"><div class="tip-emoji">🥗</div><div class="tip-title">Eat the Rainbow</div><div class="tip-text">Include 5 different colored vegetables and fruits daily. Each color provides unique nutrients and antioxidants your body needs.</div><span class="tip-tag">Nutrition</span></div>
+    <div class="tip-card reveal"><div class="tip-emoji">😴</div><div class="tip-title">Quality Sleep</div><div class="tip-text">Aim for 7–9 hours of uninterrupted sleep. Quality sleep repairs cells, regulates hormones, and strengthens immunity.</div><span class="tip-tag">Recovery</span></div>
+    <div class="tip-card reveal"><div class="tip-emoji">☀️</div><div class="tip-title">Morning Sunlight</div><div class="tip-text">Get 15–20 minutes of natural light in the morning to regulate your circadian rhythm and boost vitamin D levels naturally.</div><span class="tip-tag">Lifestyle</span></div>
+  </div>
+</section>
+
+<!-- BMI TRACKER -->
+<section class="section tracker-bg" id="tracker">
+  <div class="tracker-inner">
+    <div class="chip reveal">Health Tools</div>
+    <h2 class="reveal">Check Your <em>BMI</em> Instantly</h2>
+    <p class="section-desc reveal">Use our BMI calculator to understand your body composition and get personalized health insights.</p>
+    <div class="bmi-calculator reveal">
+      <div class="bmi-inputs">
+        <div class="bmi-field"><label>Weight (kg)</label><input type="number" id="bmiWeight" placeholder="e.g. 65"/></div>
+        <div class="bmi-field"><label>Height (cm)</label><input type="number" id="bmiHeight" placeholder="e.g. 170"/></div>
+      </div>
+      <button class="bmi-btn" onclick="calcBMI()">Calculate BMI →</button>
+      <div class="bmi-result" id="bmiResult">
+        <div class="bmi-score" id="bmiScore"></div>
+        <div class="bmi-cat" id="bmiCat"></div>
+        <div class="bmi-tip" id="bmiTip"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section testimonials-bg">
+  <div class="section-center">
+    <div class="chip reveal">Patient Stories</div>
+    <h2 class="reveal">What Our <em>Patients</em> Say</h2>
+    <p class="section-desc reveal">Real experiences from people who trust MediCare+ for their healthcare needs.</p>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testi-card reveal"><div class="testi-stars">★★★★★</div><div class="testi-text">"Booking an appointment was so easy! The doctor was incredibly thorough and I got my diagnosis within the same day. Highly recommend MediCare+."</div><div class="testi-author"><div class="testi-avatar">AN</div><div><div class="testi-name">Ananya N.</div><div class="testi-role">Hyderabad</div></div></div></div>
+    <div class="testi-card reveal"><div class="testi-stars">★★★★★</div><div class="testi-text">"The mental wellness service changed my life. Having a therapist available within 24 hours made all the difference during a difficult time."</div><div class="testi-author"><div class="testi-avatar">RV</div><div><div class="testi-name">Rahul V.</div><div class="testi-role">Bangalore</div></div></div></div>
+    <div class="testi-card reveal"><div class="testi-stars">★★★★★</div><div class="testi-text">"The BMI tracker and wellness tips helped me lose 8kg in 3 months. The nutrition consultations were spot-on and very personalized."</div><div class="testi-author"><div class="testi-avatar">SP</div><div><div class="testi-name">Sneha P.</div><div class="testi-role">Chennai</div></div></div></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <div class="brand">● MediCare+</div>
+    <p class="footer-desc">Your trusted healthcare partner — connecting patients with world-class medical professionals across India.</p>
+  </div>
+  <div class="footer-col">
+    <h4>Services</h4>
+    <ul>
+      <li><a href="#">General Medicine</a></li>
+      <li><a href="#">Cardiology</a></li>
+      <li><a href="#">Mental Health</a></li>
+      <li><a href="#">Orthopedics</a></li>
+      <li><a href="#">Lab Tests</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Company</h4>
+    <ul>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Our Doctors</a></li>
+      <li><a href="#">Careers</a></li>
+      <li><a href="#">Blog</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Support</h4>
+    <ul>
+      <li><a href="#">Help Center</a></li>
+      <li><a href="#">Privacy Policy</a></li>
+      <li><a href="#">Terms of Service</a></li>
+      <li><a href="#">Emergency: 108</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">© 2026 MediCare+ Healthcare Platform. Built with ❤️ by Gunnam Durga Praveen.</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h3>Quick Book</h3>
+    <div class="modal-doctor-info">
+      <div class="modal-doc-icon" id="modalIcon">👩‍⚕️</div>
+      <div><div class="modal-doc-name" id="modalName"></div><div class="modal-doc-spec" id="modalSpec"></div></div>
+    </div>
+    <div class="form-group"><label>Your Name</label><input type="text" placeholder="Enter your full name"/></div>
+    <div class="form-group"><label>Preferred Date</label><input type="date"/></div>
+    <div class="form-group"><label>Time Slot</label>
+      <select><option>Select Time</option><option>9:00 AM</option><option>11:00 AM</option><option>2:00 PM</option><option>4:00 PM</option><option>6:00 PM</option></select>
+    </div>
+    <button class="form-submit" onclick="confirmModal()">Confirm Booking →</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✅ Appointment Confirmed!</div>
+
+<script>
+  // Scroll reveal
+  const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // BMI Calculator
+  function calcBMI() {
+    const w = parseFloat(document.getElementById('bmiWeight').value);
+    const h = parseFloat(document.getElementById('bmiHeight').value) / 100;
+    if(!w || !h || w <= 0 || h <= 0) { alert('Please enter valid values!'); return; }
+    const bmi = (w / (h * h)).toFixed(1);
+    let cat = '', tip = '', color = '';
+    if(bmi < 18.5) { cat = '⚠️ Underweight'; tip = 'Consider consulting a nutritionist for a healthy weight gain plan.'; color = '#ffd166'; }
+    else if(bmi < 25) { cat = '✅ Normal Weight'; tip = 'Great! Maintain your healthy lifestyle with regular exercise and a balanced diet.'; color = '#0d6e4f'; }
+    else if(bmi < 30) { cat = '⚠️ Overweight'; tip = 'Consider increasing physical activity and consulting a dietitian for guidance.'; color = '#ff9500'; }
+    else { cat = '🔴 Obese'; tip = 'We recommend consulting one of our doctors for a personalized health plan.'; color = '#ff4444'; }
+    document.getElementById('bmiScore').textContent = bmi;
+    document.getElementById('bmiScore').style.color = color;
+    document.getElementById('bmiCat').textContent = cat;
+    document.getElementById('bmiTip').textContent = tip;
+    document.getElementById('bmiResult').classList.add('show');
+  }
+
+  // Booking form
+  function handleBooking() {
+    document.getElementById('bookingFormWrap').style.display = 'none';
+    const msg = document.getElementById('successMsg');
+    msg.style.display = 'block';
+    showToast('🎉 Booking confirmed! Check your email.');
+  }
+
+  // Modal
+  function openModal(name, spec) {
+    document.getElementById('modalName').textContent = name;
+    document.getElementById('modalSpec').textContent = spec;
+    document.getElementById('modal').classList.add('open');
+  }
+  function closeModal() { document.getElementById('modal').classList.remove('open'); }
+  function confirmModal() {
+    closeModal();
+    showToast('✅ Appointment with ' + document.getElementById('modalName').textContent + ' confirmed!');
+  }
+  document.getElementById('modal').addEventListener('click', function(e){ if(e.target === this) closeModal(); });
+
+  // Toast
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+</script>
+</body>
+</html>
